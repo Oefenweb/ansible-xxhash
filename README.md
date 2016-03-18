@@ -1,6 +1,6 @@
 ## xxhash
 
-[![Build Status](https://travis-ci.org/Oefenweb/ansible-xxhash.svg?branch=master)](https://travis-ci.org/Oefenweb/ansible-xxhash) [![Ansible Galaxy](http://img.shields.io/badge/ansible--galaxy-xxhash-blue.svg)](https://galaxy.ansible.com/tersmitten/fonts)
+[![Build Status](https://travis-ci.org/Oefenweb/ansible-xxhash.svg?branch=master)](https://travis-ci.org/Oefenweb/ansible-xxhash) [![Ansible Galaxy](http://img.shields.io/badge/ansible--galaxy-xxhash-blue.svg)](https://galaxy.ansible.com/tersmitten/xxhash)
 
 Set up [xxHash](http://www.xxhash.com/) (An extremely fast non-cryptographic hash algorithm, working at speeds close to RAM limits) in Debian-like systems.
 
