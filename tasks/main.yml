@@ -1,0 +1,72 @@
+# tasks file for xxhash
+---
+- name: install dependencies
+  apt:
+    name: "{{ item }}"
+    state: latest
+    update_cache: true
+    cache_valid_time: "{{ apt_update_cache_valid_time | default(3600) }}"
+  with_items: xxhash_dependencies
+  tags:
+    - configuration
+    - xxhash
+    - xxhash-dependencies
+
+- name: create (checkout) directory
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  with_items:
+    - "{{ xxhash_checkout_path }}"
+    - "{{ xxhash_build_path }}"
+  tags:
+    - configuration
+    - xxhash
+    - xxhash-checkout
+
+- name: checkout repository
+  git:
+    repo: https://github.com/Cyan4973/xxHash
+    dest: "{{ xxhash_checkout_path }}"
+    version: "{{ xxhash_version }}"
+  register: git_checkout
+  tags:
+    - configuration
+    - xxhash
+    - xxhash-checkout
+
+- name: build
+  shell: make xxhsum && cp -a {{ xxhash_checkout_path }}/xxhsum {{ xxhash_build_path }}/xxhsum_{{ xxhash_version }}
+  args:
+    chdir: "{{ xxhash_checkout_path }}"
+    creates: "{{ xxhash_build_path }}/xxhsum_{{ xxhash_version }}"
+  when: git_checkout | changed
+  tags:
+    - configuration
+    - xxhash
+    - xxhash-build
+
+- name: install
+  file:
+    src: "{{ xxhash_build_path }}/xxhsum_{{ xxhash_version }}"
+    dest: "{{ xxhash_install_dir }}/xxhsum"
+    state: link
+    force: true
+  when: git_checkout | changed
+  tags:
+    - configuration
+    - xxhash
+    - xxhash-install
+
+- name: cleanup build
+  shell: "git reset --hard && git clean -d -x -f"
+  args:
+    chdir: "{{ xxhash_checkout_path }}"
+  when: git_checkout | changed
+  tags:
+    - configuration
+    - xxhash
+    - xxhash-cleanup-build
