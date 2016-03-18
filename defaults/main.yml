@@ -1,0 +1,4 @@
+# defaults file for xxhash
+---
+xxhash_version: v0.5.1
+xxhash_install_dir: /usr/bin

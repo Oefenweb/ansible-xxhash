@@ -1,0 +1,8 @@
+# vars file for xxhash
+---
+xxhash_dependencies:
+  - git-core
+  - build-essential
+
+xxhash_checkout_path: /var/lib/ansible/xxhash/checkouts/xxhash
+xxhash_build_path: /var/lib/ansible/xxhash/builds
