@@ -6,7 +6,7 @@
     state: latest
     update_cache: true
     cache_valid_time: "{{ apt_update_cache_valid_time | default(3600) }}"
-  with_items: xxhash_dependencies
+  with_items: "{{ xxhash_dependencies }}"
   tags:
     - configuration
     - xxhash
@@ -39,7 +39,8 @@
     - xxhash-checkout
 
 - name: build
-  shell: make xxhsum && cp -a {{ xxhash_checkout_path }}/xxhsum {{ xxhash_build_path }}/xxhsum_{{ xxhash_version }}
+  shell: >
+    make xxhsum && cp -a {{ xxhash_checkout_path }}/xxhsum {{ xxhash_build_path }}/xxhsum_{{ xxhash_version }}
   args:
     chdir: "{{ xxhash_checkout_path }}"
     creates: "{{ xxhash_build_path }}/xxhsum_{{ xxhash_version }}"
@@ -62,7 +63,7 @@
     - xxhash-install
 
 - name: cleanup build
-  shell: "git reset --hard && git clean -d -x -f"
+  shell: git reset --hard && git clean -d -x -f
   args:
     chdir: "{{ xxhash_checkout_path }}"
   when: git_checkout | changed
