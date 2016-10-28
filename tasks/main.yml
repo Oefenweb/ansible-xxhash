@@ -32,6 +32,7 @@
     repo: https://github.com/Cyan4973/xxHash
     dest: "{{ xxhash_checkout_path }}"
     version: "{{ xxhash_version }}"
+    force: true
   register: git_checkout
   tags:
     - configuration
