@@ -45,7 +45,7 @@
   args:
     chdir: "{{ xxhash_checkout_path }}"
     creates: "{{ xxhash_build_path }}/xxhsum_{{ xxhash_version }}"
-  when: git_checkout | changed
+  when: git_checkout is changed
   tags:
     - configuration
     - xxhash
@@ -57,7 +57,7 @@
     dest: "{{ xxhash_install_dir }}/xxhsum"
     state: link
     force: true
-  when: git_checkout | changed
+  when: git_checkout is changed
   tags:
     - configuration
     - xxhash
@@ -67,7 +67,7 @@
   shell: git reset --hard && git clean -d -x -f
   args:
     chdir: "{{ xxhash_checkout_path }}"
-  when: git_checkout | changed
+  when: git_checkout is changed
   tags:
     - configuration
     - xxhash
