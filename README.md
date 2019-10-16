@@ -12,7 +12,7 @@ Set up [xxHash](http://www.xxhash.com/) (An extremely fast non-cryptographic has
 
 #### Variables
 
-* `xxhash_version` [default: `v0.7.1`]: What version of `xxhash` to check out (set up). This can be the full 40-character SHA-1 hash, the literal string HEAD, a branch name, or a tag name
+* `xxhash_version` [default: `v0.7.2`]: What version of `xxhash` to check out (set up). This can be the full 40-character SHA-1 hash, the literal string HEAD, a branch name, or a tag name
 * `xxhash_install_dir` [default: `/usr/bin`]: Install directory
 
 ## Dependencies
