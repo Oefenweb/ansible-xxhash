@@ -1,6 +1,7 @@
 # meta file for xxhash
 ---
 galaxy_info:
+  role_name: xxhash
   author: Mischa ter Smitten
   company: Oefenweb.nl B.V.
   description: Set up xxHash in Debian-like systems.
