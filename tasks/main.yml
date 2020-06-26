@@ -2,11 +2,10 @@
 ---
 - name: install dependencies
   apt:
-    name: "{{ item }}"
+    name: "{{ xxhash_dependencies }}"
     state: "{{ apt_install_state | default('latest') }}"
     update_cache: true
     cache_valid_time: "{{ apt_update_cache_valid_time | default(3600) }}"
-  with_items: "{{ xxhash_dependencies }}"
   tags:
     - configuration
     - xxhash
@@ -33,7 +32,7 @@
     dest: "{{ xxhash_checkout_path }}"
     version: "{{ xxhash_version }}"
     force: true
-  register: git_checkout
+  register: _git_checkout
   tags:
     - configuration
     - xxhash
@@ -45,7 +44,7 @@
   args:
     chdir: "{{ xxhash_checkout_path }}"
     creates: "{{ xxhash_build_path }}/xxhsum_{{ xxhash_version }}"
-  when: git_checkout is changed
+  when: _git_checkout is changed
   tags:
     - configuration
     - xxhash
@@ -57,17 +56,18 @@
     dest: "{{ xxhash_install_dir }}/xxhsum"
     state: link
     force: true
-  when: git_checkout is changed
+  when: _git_checkout is changed
   tags:
     - configuration
     - xxhash
     - xxhash-install
 
 - name: cleanup build
-  shell: git reset --hard && git clean -d -x -f
+  shell: >
+    git reset --hard && git clean -d -x -f
   args:
     chdir: "{{ xxhash_checkout_path }}"
-  when: git_checkout is changed
+  when: _git_checkout is changed
   tags:
     - configuration
     - xxhash
