@@ -7,7 +7,7 @@ Set up [xxHash](http://www.xxhash.com/) (An extremely fast non-cryptographic has
 
 #### Requirements
 
-* `git-core` (will be installed)
+* `git` (will be installed)
 * `build-essential` (will be installed)
 
 #### Variables
