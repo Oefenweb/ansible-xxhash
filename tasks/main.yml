@@ -38,37 +38,35 @@
     - xxhash
     - xxhash-checkout
 
-- name: build
-  shell: >
-    make xxhsum && cp -a {{ xxhash_checkout_path }}/xxhsum {{ xxhash_build_path }}/xxhsum_{{ xxhash_version }}
-  args:
-    chdir: "{{ xxhash_checkout_path }}"
-    creates: "{{ xxhash_build_path }}/xxhsum_{{ xxhash_version }}"
-  when: _git_checkout is changed
-  tags:
-    - configuration
-    - xxhash
-    - xxhash-build
+- block:
 
-- name: install
-  file:
-    src: "{{ xxhash_build_path }}/xxhsum_{{ xxhash_version }}"
-    dest: "{{ xxhash_install_dir }}/xxhsum"
-    state: link
-    force: true
-  when: _git_checkout is changed
-  tags:
-    - configuration
-    - xxhash
-    - xxhash-install
+  - name: build
+    shell: >
+      make xxhsum && cp -a {{ xxhash_checkout_path }}/xxhsum {{ xxhash_build_path }}/xxhsum_{{ xxhash_version }}
+    args:
+      chdir: "{{ xxhash_checkout_path }}"
+      creates: "{{ xxhash_build_path }}/xxhsum_{{ xxhash_version }}"
+    tags:
+      - xxhash-build
 
-- name: cleanup build
-  shell: >
-    git reset --hard && git clean -d -x -f
-  args:
-    chdir: "{{ xxhash_checkout_path }}"
+  - name: install
+    file:
+      src: "{{ xxhash_build_path }}/xxhsum_{{ xxhash_version }}"
+      dest: "{{ xxhash_install_dir }}/xxhsum"
+      state: link
+      force: true
+    tags:
+      - xxhash-install
+
+  - name: cleanup build
+    shell: >
+      git reset --hard && git clean -d -x -f
+    args:
+      chdir: "{{ xxhash_checkout_path }}"
+    tags:
+      - xxhash-cleanup-build
+
   when: _git_checkout is changed
   tags:
     - configuration
     - xxhash
-    - xxhash-cleanup-build
