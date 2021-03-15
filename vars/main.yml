@@ -1,4 +1,4 @@
-# vars file for xxhash
+# vars file
 ---
 xxhash_dependencies:
   - git
