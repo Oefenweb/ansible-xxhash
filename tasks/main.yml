@@ -62,7 +62,7 @@
       tags:
         - xxhash-install
 
-    - name: cleanup build
+    - name: cleanup build  # noqa command-instead-of-module
       ansible.builtin.shell: >
         git reset --hard && git clean -d -x -f
       args:
