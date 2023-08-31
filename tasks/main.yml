@@ -1,7 +1,7 @@
 # tasks file
 ---
 - name: install dependencies
-  apt:
+  ansible.builtin.apt:
     name: "{{ xxhash_dependencies }}"
     state: "{{ apt_install_state | default('latest') }}"
     update_cache: true
@@ -12,7 +12,7 @@
     - xxhash-dependencies
 
 - name: create (checkout) directory
-  file:
+  ansible.builtin.file:
     path: "{{ item }}"
     state: directory
     owner: root
@@ -27,7 +27,7 @@
     - xxhash-checkout
 
 - name: checkout repository
-  git:
+  ansible.builtin.git:
     repo: https://github.com/Cyan4973/xxHash
     dest: "{{ xxhash_checkout_path }}"
     version: "{{ xxhash_version }}"
@@ -38,10 +38,14 @@
     - xxhash
     - xxhash-checkout
 
-- block:
-
+- name: install
+  when: _git_checkout is changed
+  tags:
+    - configuration
+    - xxhash
+  block:
     - name: build
-      shell: >
+      ansible.builtin.shell: >
         make xxhsum && cp -a {{ xxhash_checkout_path }}/xxhsum {{ xxhash_build_path }}/xxhsum_{{ xxhash_version }}
       args:
         chdir: "{{ xxhash_checkout_path }}"
@@ -50,7 +54,7 @@
         - xxhash-build
 
     - name: install
-      file:
+      ansible.builtin.file:
         src: "{{ xxhash_build_path }}/xxhsum_{{ xxhash_version }}"
         dest: "{{ xxhash_install_dir }}/xxhsum"
         state: link
@@ -58,15 +62,11 @@
       tags:
         - xxhash-install
 
-    - name: cleanup build
-      shell: >
+    - name: cleanup build  # noqa command-instead-of-module
+      ansible.builtin.shell: >
         git reset --hard && git clean -d -x -f
       args:
         chdir: "{{ xxhash_checkout_path }}"
+      changed_when: true
       tags:
         - xxhash-cleanup-build
-
-  when: _git_checkout is changed
-  tags:
-    - configuration
-    - xxhash
