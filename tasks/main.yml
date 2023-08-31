@@ -67,5 +67,6 @@
         git reset --hard && git clean -d -x -f
       args:
         chdir: "{{ xxhash_checkout_path }}"
+      changed_when: true
       tags:
         - xxhash-cleanup-build
